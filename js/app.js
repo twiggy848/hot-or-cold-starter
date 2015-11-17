@@ -1,8 +1,14 @@
 $(document).ready(function() {
+    
 
 	//as soon as the page loads generate the random number
     var mainNumber = Math.floor(Math.random() * 100);
 
+    //New Game Reset
+    function newGame(){
+         window.location.reload();
+    }
+    
     var DEBUG_MODE = true;
     var debug = function(msg) {
         if (DEBUG_MODE == true) {
@@ -47,17 +53,22 @@ $(document).ready(function() {
     
         //here it should be the function which checks if the input number is close to random number and displays Hot, Warm, or Cold
     function checkGuesses(guess) {
-        var closeLow = mainNumber - 10;
+        var closeLow = mainNumber -+ 10;
         var closeHigh = mainNumber + 10;
+        var medLow = mainNumber - 30;
+        var medHigh = mainNumber + 30;
         
 	    if (guess == mainNumber) {
             $('#feedback').text('Your guess is CORRECT!, YOU WIN!');
         } else if ((guess >= closeLow) && (guess <= closeHigh )) {
             $('#feedback').text('Your guess is getting HOTTER!');
+        } else if ((guess >= medLow) && (guess <= medHigh )) {
+            $('#feedback').text('Your guess is a little cold.');
+        } else {
+           $('#feedback').text('Your guess is freezing!'); 
         }
             
     }
-    
     
     //on button click addGuesses
     $('#guessButton').on('click', addGuesses);
@@ -67,7 +78,9 @@ $(document).ready(function() {
 	$(document).on('keypress', function(key) {
         if (key.keyCode == 13) {
             addGuesses();
+            countClicks();
         }
 	});
 	
+    $('.new').on('click', newGame);
 });
