@@ -33,6 +33,9 @@ $(document).ready(function() {
         var guess = $("#userGuess").val();
         debug(guess);
         
+        //store guess
+        guessStorage(guess);
+        
         //check the guess
         checkGuesses(guess);
         
@@ -51,7 +54,15 @@ $(document).ready(function() {
         document.getElementById("count").innerHTML = count;
     }
     
-        //here it should be the function which checks if the input number is close to random number and displays Hot, Warm, or Cold
+    //guesses storage
+    var allGuesses = [];
+    function guessStorage(guess) {
+        allGuesses.push(guess);
+        debug(allGuesses);
+        return allGuesses;
+    }
+    
+    //check guesses, hot or cold?
     function checkGuesses(guess) {
         var closeLow = mainNumber -+ 10;
         var closeHigh = mainNumber + 10;
