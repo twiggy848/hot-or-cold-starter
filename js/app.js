@@ -1,51 +1,73 @@
+$(document).ready(function() {
 
-$(document).ready(function(){
+	//as soon as the page loads generate the random number
+    var mainNumber = Math.floor(Math.random() * 100);
 
-	var DEBUG_MODE = true;
-		var debug = function(msg) {
-	    if (DEBUG_MODE == true) {
-	        console.log("DEBUG:", msg);
-	    }
-	}
-	
-	/*--- Display information modal box ---*/
-  	$(".what").click(function(){
-    	$(".overlay").fadeIn(1000);
+    var DEBUG_MODE = true;
+    var debug = function(msg) {
+        if (DEBUG_MODE == true) {
+            console.log("DEBUG:", msg);
+        }
+    } 
+    
+    /*--- Display information modal box ---*/
+    $(".what").click(function() {
+        $(".overlay").fadeIn(1000);
+    }); 
+    
+    /*--- Hide information modal box ---*/
+    $("a.close").click(function() {
+        $(".overlay").fadeOut(1000);
+    });
+    
+    debug(mainNumber);
 
-  	});
+    function addGuesses() {
+    	//get the input value
+        var guess = $("#userGuess").val();
+        debug(guess);
+        
+        //check the guess
+        checkGuesses(guess);
+        
+		//appended it to the gues list
+        var guessDisplay = $('<li>' + guess + '</li>');
+        $('#guessList').append(guessDisplay);
 
-  	/*--- Hide information modal box ---*/
-  	$("a.close").click(function(){
-  		$(".overlay").fadeOut(1000);
-  	});
-
-  	var guess = $("#userGuess").val();
-  	debug(guess);
-  	var mainNumber = Math.floor(Math.random()*100);
-  	debug(mainNumber);
-  	var guessDisplay = $('<li>' + guess + '</li>');
-
-  		function addGuesses(){
-
-	    $('.guessBox').prepend(guessDisplay);
-	    $('guess').val();
-
-  		};
-
-  		$('#guessButton').on('click', addGuesses);
-  		$('#userGuess').keydown(function(e) {
-        if (e.which == 13 ) {
+		//reset it to the empty value for a new input
+        $('#userGuess').val('');
+    }
+    
+    //guess counter
+    var count = 0;
+    function countClicks() {
+        count = count + 1;
+        document.getElementById("count").innerHTML = count;
+    }
+    
+        //here it should be the function which checks if the input number is close to random number and displays Hot, Warm, or Cold
+    function checkGuesses(guess) {
+        var closeLow = mainNumber - 10;
+        var closeHigh = mainNumber + 10;
+        
+	    if (guess == mainNumber) {
+            $('#feedback').text('Your guess is CORRECT!, YOU WIN!');
+        } else if ((guess >= closeLow) && (guess <= closeHigh )) {
+            $('#feedback').text('Your guess is getting HOTTER!');
+        }
+            
+    }
+    
+    
+    //on button click addGuesses
+    $('#guessButton').on('click', addGuesses);
+    $('#guessButton').on('click', countClicks);
+    
+    //on key press Enter addGuesses
+	$(document).on('keypress', function(key) {
+        if (key.keyCode == 13) {
             addGuesses();
         }
-  
-    	});
-    	// $('#userGuess').keydown(function(e) {
-	    //     if (e.which == 13 ) {
-	    //         addGuesses();
-	    //     }
-     //    });
-
-
+	});
+	
 });
-
-
