@@ -40,7 +40,7 @@ $(document).ready(function() {
         if (guess % 1 === 0) {
              //check the guess
             checkGuesses(guess);
-        
+            countClicks();
 		  //appended it to the gues list
             var guessDisplay = $('<li>' + guess + '</li>');
             $('#guessList').append(guessDisplay);
@@ -116,13 +116,13 @@ $(document).ready(function() {
     
     //on button click addGuesses
     $('#guessButton').on('click', addGuesses);
-    $('#guessButton').on('click', countClicks);
+//    $('#guessButton').on('click', countClicks);
     
     //on key press Enter addGuesses
 	$(document).on('keypress', function(key) {
         if (key.keyCode == 13) {
             addGuesses();
-            countClicks();
+            
         }
 	});
 	
