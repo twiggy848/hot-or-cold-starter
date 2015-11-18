@@ -1,8 +1,10 @@
 $(document).ready(function() {
     
 
-	//as soon as the page loads generate the random number
+	//all global variables
     var mainNumber = Math.floor(Math.random() * 100);
+    var allGuesses = [];
+    var count = 0;
 
     //New Game Reset
     function newGame(){
@@ -33,9 +35,6 @@ $(document).ready(function() {
         var guess = $("#userGuess").val();
         debug(guess);
         
-        //store guess
-        guessStorage(guess);
-        
         //check the guess
         checkGuesses(guess);
         
@@ -48,36 +47,62 @@ $(document).ready(function() {
     }
     
     //guess counter
-    var count = 0;
     function countClicks() {
         count = count + 1;
         document.getElementById("count").innerHTML = count;
     }
     
-    //guesses storage
-    var allGuesses = [];
-    function guessStorage(guess) {
-        allGuesses.push(guess);
-        debug(allGuesses);
-        return allGuesses;
-    }
-    
-    //check guesses, hot or cold?
+    //check and store guesses, hot or cold?
     function checkGuesses(guess) {
-        var closeLow = mainNumber -+ 10;
+        var hotLow = mainNumber - 5;
+        var hotHigh = mainNumber + 5;
+        var closeLow = mainNumber - 10;
         var closeHigh = mainNumber + 10;
         var medLow = mainNumber - 30;
         var medHigh = mainNumber + 30;
         
-	    if (guess == mainNumber) {
+        guessStorage(guess);
+        
+	    function guessStorage(guess) {
+            allGuesses.push(guess);
+            debug(allGuesses);
+            return allGuesses;
+        }
+        
+        var lastGuessPosition = allGuesses.length - 2;
+        debug('Position: ' + lastGuessPosition);
+        var lastGuess = allGuesses[lastGuessPosition];
+        debug('Last Guess: ' + lastGuess);
+        
+        if (guess == mainNumber) {
             $('#feedback').text('Your guess is CORRECT!, YOU WIN!');
+        } else if ((guess >= hotLow) && (guess <= hotHigh )) {
+            $('#feedback').text('Your guess is BOILING!!');
         } else if ((guess >= closeLow) && (guess <= closeHigh )) {
             $('#feedback').text('Your guess is getting HOTTER!');
         } else if ((guess >= medLow) && (guess <= medHigh )) {
             $('#feedback').text('Your guess is a little cold.');
         } else {
            $('#feedback').text('Your guess is freezing!'); 
+        } 
+        
+        var helper = '';
+        
+        if ( lastGuess >= 1) {
+            if (guess == mainNumber) {
+                $('#feedback').text('Your guess is CORRECT!, YOU WIN!');
+            } else if ( (guess > lastGuess) && (guess < mainNumber) ) {
+                var helper = 'Keep going up';
+            } else if ( (guess < lastGuess) && (guess < mainNumber) ) {
+                var helper = 'Too Low!';
+            } else if ( (guess < lastGuess) && ( guess > mainNumber) ) {
+               var helper = 'Keep going down'; 
+            } else if ( (guess > lastGuess) && ( guess > mainNumber) ) {
+                var helper = 'Too High!';
+            } 
         }
+        debug(helper);
+        $('#feedback').append(' ' + helper);
             
     }
     
