@@ -32,15 +32,21 @@ $(document).ready(function() {
 
     function addGuesses() {
     	//get the input value
-        var guess = $("#userGuess").val();
+        var input = $("#userGuess").val();
+        var guess = parseFloat(input);
+        debug (typeof guess);
         debug(guess);
         
-        //check the guess
-        checkGuesses(guess);
+        if (guess % 1 === 0) {
+             //check the guess
+            checkGuesses(guess);
         
-		//appended it to the gues list
-        var guessDisplay = $('<li>' + guess + '</li>');
-        $('#guessList').append(guessDisplay);
+		  //appended it to the gues list
+            var guessDisplay = $('<li>' + guess + '</li>');
+            $('#guessList').append(guessDisplay);
+        } else {
+            $('#feedback').text('Please enter a whole number.');
+        }
 
 		//reset it to the empty value for a new input
         $('#userGuess').val('');
@@ -95,7 +101,9 @@ $(document).ready(function() {
                 var helper = 'Keep going up';
             } else if ( (guess < lastGuess) && (guess < mainNumber) ) {
                 var helper = 'Too Low!';
-            } else if ( (guess < lastGuess) && ( guess > mainNumber) ) {
+            } else if ( (guess < lastGuess) && (guess > mainNumber) ) {
+                debug('True');
+                debug(mainNumber);
                var helper = 'Keep going down'; 
             } else if ( (guess > lastGuess) && ( guess > mainNumber) ) {
                 var helper = 'Too High!';
